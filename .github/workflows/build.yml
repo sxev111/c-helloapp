@@ -1,18 +1,23 @@
 name: Build C++ to EXE
 on: [push]
 
+# This environment variable removes the deprecation warning
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   build:
-    runs-on: windows-latest  # Uses a Windows environment
+    runs-on: windows-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Compile C++
-        run: g++ main.cpp -o my_program.exe  # Compiles your code into an .exe
+        # Adding -static ensures the .exe runs on other PCs without missing DLL errors
+        run: g++ -static main.cpp -o my_program.exe
 
       - name: Upload Executable
         uses: actions/upload-artifact@v4
         with:
           name: windows-executable
-          path: my_program.exe  # Makes the .exe downloadable from 
+          path: my_program.exe downloadable from 
